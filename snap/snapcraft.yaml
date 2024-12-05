@@ -39,7 +39,8 @@ parts:
       - --prefix=/usr
       - -Dunity_support=true
     build-environment:
-      - LD_LIBRARY_PATH: ${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}/snap/gnome-46-2404-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libunity
+      - LD_LIBRARY_PATH: "${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}\
+                          /snap/gnome-46-2404-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libunity"
     parse-info: [usr/share/metainfo/org.gnome.Shotwell.appdata.xml]
     build-packages:
       - cmake
