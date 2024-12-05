@@ -2,7 +2,7 @@ name: shotwell
 adopt-info: shotwell
 grade: stable
 confinement: strict
-base: core22
+base: core24
 
 slots:
   # for GtkApplication registration
@@ -33,13 +33,14 @@ parts:
 #     format: "shotwell-%M.%m.%R"
     plugin: meson
     source: https://gitlab.gnome.org/GNOME/shotwell.git
-    source-tag: shotwell-0.32.2
+    source-tag: shotwell-0.32.10
     source-depth: 1
     meson-parameters:
       - --prefix=/usr
       - -Dunity_support=true
     build-environment:
-      - LD_LIBRARY_PATH: ${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}/snap/gnome-42-2204-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET/libunity
+      - LD_LIBRARY_PATH: "${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}\
+                          /snap/gnome-46-2404-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libunity"
     parse-info: [usr/share/metainfo/org.gnome.Shotwell.appdata.xml]
     build-packages:
       - cmake
@@ -54,27 +55,27 @@ parts:
       - libgcr-ui-3-1
       - libgdata22
       - libgexiv2-2
-      - libgphoto2-6
-      - libgphoto2-port12
-      - libraw20
-      - libmtp9
+      - libgphoto2-6t64
+      - libgphoto2-port12t64
+      - libraw23t64
+      - libmtp9t64
 
   cleanup:
     after: [shotwell]
     plugin: nil
-    build-snaps: [core22, gtk-common-themes]
+    build-snaps: [core24, gtk-common-themes]
     override-prime: |
       set -eux
-      for snap in "core22" "gtk-common-themes"; do
+      for snap in "core24" "gtk-common-themes"; do
         cd "/snap/$snap/current" && find . -type f,l -name *.so.* \
           -exec rm -f "$CRAFT_PRIME/{}" \;
       done
-      for snap in "core22"; do
+      for snap in "core24"; do
         cd "/snap/$snap/current/usr/lib"
         for filename in [ *.so* ]; do
-          rm -f "$CRAFT_PRIME/usr/lib/$CRAFT_ARCH_TRIPLET/$filename"
+          rm -f "$CRAFT_PRIME/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/$filename"
         done
-        cd "/snap/$snap/current/usr/lib/$CRAFT_ARCH_TRIPLET"
+        cd "/snap/$snap/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR"
         for filename in [ *.so* ]; do
           rm -f "$CRAFT_PRIME/usr/lib/$filename"
         done
